@@ -14,14 +14,59 @@ import SwiftUI
 /// the views rank values using the `Rank` view layout key, the layout rotates
 /// the view positions so that the views appear in rank order from top to
 /// bottom.
+///
+/// ![Three filled circles placed at equal distances along the outline of a
+/// larger, empty circle. The outline of the larger circle uses a dashed
+/// line.](avatars)
+///
+/// Like other custom layouts, this layout implements the two required methods.
+/// For ``sizeThatFits(proposal:subviews:cache:)``, the layout fills the
+/// available space by returning whatever size its container proposes.
+/// The layout uses the proposal's
+/// [`replacingUnspecifiedDimensions(by:)`](https://developer.apple.com/documentation/swiftui/proposedviewsize/replacingunspecifieddimensions(by:))
+/// method to convert the proposal into a concrete size:
+///
+/// ```swift
+/// proposal.replacingUnspecifiedDimensions()
+/// ```
+///
+/// Then, in the ``placeSubviews(in:proposal:subviews:cache:)`` method, the
+/// layout rotates a vector, translates the vector to the middle of the
+/// placement region, and uses that as the anchor for the subview:
+///
+/// ```swift
+/// for (index, subview) in subviews.enumerated() {
+///     // Find a vector with an appropriate size and rotation.
+///     var point = CGPoint(x: 0, y: -radius)
+///         .applying(CGAffineTransform(
+///             rotationAngle: angle * Double(index) + offset))
+///
+///     // Shift the vector to the middle of the region.
+///     point.x += bounds.midX
+///     point.y += bounds.midY
+///
+///     // Place the subview.
+///     subview.place(at: point, anchor: .center, proposal: .unspecified)
+/// }
+/// ```
+///
+/// The offset that the layout applies to the rotation accounts for the current
+/// rankings, placing higher-ranked pets closer to the top of the interface. The
+/// app stores ranks on the subviews using the
+/// [`LayoutValueKey`](https://developer.apple.com/documentation/swiftui/layoutvaluekey)
+/// protocol, and then reads the values to calculate the offset before placing
+/// views.
 struct MyRadialLayout: Layout {
-    /// Returns a size that the layout container needs to arrange its subviews.
+    /// Returns a size that the layout container needs to arrange its subviews
+    /// in a circle.
     ///
     /// This implementation uses whatever space the container view proposes.
     /// If the container asks for this layout's ideal size, it offers the
-    /// the `unspecified` proposal, which contains `nil` in each dimension.
+    /// the [`unspecified`](https://developer.apple.com/documentation/swiftui/proposedviewsize/unspecified)
+    /// proposal, which contains `nil` in each dimension.
     /// To convert that to a concrete size, this method uses the proposal's
-    /// `replacingUnspecifiedDimensions(_:)` method.
+    /// [`replacingUnspecifiedDimensions(by:)`](https://developer.apple.com/documentation/swiftui/proposedviewsize/replacingunspecifieddimensions(by:))
+    /// method.
     /// - Tag: sizeThatFitsRadial
     func sizeThatFits(
         proposal: ProposedViewSize,
@@ -29,10 +74,10 @@ struct MyRadialLayout: Layout {
         cache: inout Void
     ) -> CGSize {
         // Take whatever space is offered.
-        return proposal.replacingUnspecifiedDimensions()
+        proposal.replacingUnspecifiedDimensions()
     }
 
-    /// Places the stack's subviews.
+    /// Places the stack's subviews in a circle.
     /// - Tag: placeSubviewsRadial
     func placeSubviews(
         in bounds: CGRect,

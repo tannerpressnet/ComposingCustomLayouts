@@ -9,7 +9,12 @@ building an interface that enables people to vote for their favorite kind of
 pet. The app offers buttons to vote for a specific pet type, and displays the
 vote counts and relative rankings of the various contenders on a leaderboard.
 It also shows avatars for the pets, arranged in a way that reflects the current
-rankings. 
+rankings.
+
+![An iPhone showing the layout of the app, with the three main sections called
+out. The group of avatars are in a circular arrangement at the top. The
+leaderboard grid is in the middle. The equal-width voting buttons are at the
+bottom.](Documentation/overview.png)
 
 - Note: This sample code project is associated with WWDC22 session
   [10056: Compose custom layouts with SwiftUI](https://developer.apple.com/wwdc22/10056/).
@@ -18,6 +23,16 @@ rankings.
 
 To draw a leaderboard in the middle of the display that shows vote counts and
 percentages, the sample uses a [`Grid`][Grid] view.
+
+![A grid with three rows and three columns. The first column and last column
+each contain rectangles in every cell. The middle column contains progress
+indicators with different amounts of progress.](Documentation/leaderboard.png)
+
+The grid contains a [`GridRow`][GridRow] inside a [`ForEach`][ForEach],
+where each view in the row creates a column cell. So the first view appears in
+the first column, the second in the second column, and so on. Because the
+[`Divider`][Divider] appears outside of a grid row instance, it creates a row
+that spans the width of the grid.
 
 ``` swift
 Grid(alignment: .leading) {
@@ -37,12 +52,6 @@ Grid(alignment: .leading) {
 ```
 [View in Source](x-source-tag://Leaderboard)
 
-The grid contains a [`GridRow`][GridRow] inside a [`ForEach`][ForEach],
-where each view in the row creates a column cell. So the first view appears in
-the first column, the second in the second column, and so on. Because the
-[`Divider`][Divider] appears outside of a grid row instance, it creates a row
-that spans the width of the grid.
-
 The sample initializes the grid with leading-edge alignment, which applies to
 every cell in the grid. Meanwhile, the
 [`gridColumnAlignment(_:)`][gridColumnAlignment] view modifier that appears
@@ -51,9 +60,15 @@ to use trailing-edge alignment.
 
 ## Create a custom equal-width layout
 
-The app offers buttons for voting at the bottom of the interface. To ensure
-the buttons all have the same width, but are no wider than the widest button
-text, the app creates a custom layout container type that conforms to the
+The app offers buttons for voting at the bottom of the interface.
+
+![Three rectangles arranged in a horizontal line. Each rectangle contains one
+smaller rectangle. The smaller rectangles have varying widths. Dashed lines
+above each of the container rectangles show that the larger rectangles
+all have the same width as each other.](Documentation/voting-buttons.png)
+
+To ensure the buttons all have the same width, but are no wider than the widest
+button text, the app creates a custom layout container type that conforms to the
 [`Layout`][Layout] protocol. The equal-width horizontal stack
 (`MyEqualWidthHStack`) measures the ideal sizes of all its subviews, and offers
 the widest ideal size to each subview.
@@ -119,7 +134,7 @@ in a horizontal line with default spacing.
 ## Choose the view that fits
 
 The size of the voting buttons depends on the width of the text they contain.
-For people that speak another language, or that use a larger text size,
+For people that speak another language or that use a larger text size,
 the horizontally arranged buttons might not fit in the display. So the app uses
 [`ViewThatFits`][ViewThatFits] to let SwiftUI choose between a horizontal and
 a vertical arrangement of the buttons for the one that fits in the
@@ -207,13 +222,19 @@ it needs that information.
 ## Create a custom radial layout with an offset
 
 To display the pet avatars in a circle, the app defines a radial layout
-(`MyRadialLayout`). Like other custom layouts, this layout needs the two
-required methods. For [`sizeThatFits(proposal:subviews:cache:)`][sizeThatFits],
+(`MyRadialLayout`).
+
+![Three filled circles placed at equal distances along the outline of a larger,
+empty circle. The outline of the larger circle uses a dashed 
+line.](Documentation/avatars.png)
+
+Like other custom layouts, this layout needs the two required methods.
+For [`sizeThatFits(proposal:subviews:cache:)`][sizeThatFits],
 the layout fills the available space by returning whatever size its container
 proposes.
 
 ``` swift
-return proposal.replacingUnspecifiedDimensions()
+proposal.replacingUnspecifiedDimensions()
 ```
 [View in Source](x-source-tag://sizeThatFitsRadial)
 
@@ -252,11 +273,13 @@ The radial layout can calculate an offset that creates an appropriate
 arrangement for all but one set of rankings: there's no way to show a three-way
 tie with the avatars in a circle. To resolve this, the app detects
 this condition, and uses it to put the avatars in a line instead, using a
-built-in [`HStack`][HStack]. To transition between these layout types, the
-app uses the [`AnyLayout`][AnyLayout] type.
+the [`HStackLayout`][HStackLayout] type, which is a version of the built-in
+[`HStack`][HStack] that conforms to the [`Layout`][Layout] protocol. To
+transition between these layout types, the app uses the [`AnyLayout`][AnyLayout]
+type.
 
 ``` swift
-let layout = model.isAllWayTie ? AnyLayout(HStack()) : AnyLayout(MyRadialLayout())
+let layout = model.isAllWayTie ? AnyLayout(HStackLayout()) : AnyLayout(MyRadialLayout())
 
 Podium()
     .overlay(alignment: .top) {
@@ -277,6 +300,15 @@ between layout types. The modifier also animates radial layout changes
 that result from changes in the rankings because the calculated offsets
 depend on the same pet data.
 
+## Build documentation for the app
+
+To see more information about the symbols defined by this app, you can build
+the app's documentation. Open the project in Xcode and select Product > Build
+Documentation.
+
+For information about how to include documentation in your own apps, see
+[DocC][DocC].
+
 [animation]:https://developer.apple.com/documentation/swiftui/view/animation(_:value:)
 [AnyLayout]:https://developer.apple.com/documentation/swiftui/anylayout
 [Divider]:https://developer.apple.com/documentation/swiftui/divider
@@ -285,6 +317,7 @@ depend on the same pet data.
 [gridColumnAlignment]:https://developer.apple.com/documentation/swiftui/view/gridcolumnalignment(_:)
 [GridRow]:https://developer.apple.com/documentation/swiftui/gridrow
 [HStack]:https://developer.apple.com/documentation/swiftui/hstack
+[HStackLayout]:https://developer.apple.com/documentation/swiftui/hstacklayout
 [Layout]:https://developer.apple.com/documentation/swiftui/layout
 [LayoutValueKey]:https://developer.apple.com/documentation/swiftui/layoutvaluekey
 [makeCache]:https://developer.apple.com/documentation/swiftui/layout/makecache(subviews:)-23agy
@@ -293,3 +326,4 @@ depend on the same pet data.
 [sizeThatFits]:https://developer.apple.com/documentation/swiftui/layout/sizethatfits(proposal:subviews:cache:)
 [updateCache]:https://developer.apple.com/documentation/swiftui/layout/updatecache(_:subviews:)-9hkj9
 [ViewThatFits]:https://developer.apple.com/documentation/swiftui/viewthatfits
+[DocC]:https://developer.apple.com/documentation/docc

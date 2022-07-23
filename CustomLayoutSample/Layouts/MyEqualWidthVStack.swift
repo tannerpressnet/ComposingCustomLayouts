@@ -7,8 +7,76 @@ A custom vertical stack that offers all its subviews the width of its largest su
 
 import SwiftUI
 
+/// A custom vertical stack that offers all its subviews the width of its
+/// widest subview.
+///
+/// This custom layout behaves almost identically to the ``MyEqualWidthHStack``,
+/// except that it arranges equal-width subviews in a vertical stack, rather
+/// than a horizontal one. It also implements a cache.
+///
+/// ### Adding a cache
+///
+/// The methods of the
+/// [`Layout`](https://developer.apple.com/documentation/swiftui/layout)
+/// protocol take a bidirectional `cache`
+/// parameter. The cache provides access to optional storage that's shared among
+/// all the methods of a particular layout instance. To demonstrate the use of a
+/// cache, this layout creates storage to share size and spacing calculations
+/// between its ``sizeThatFits(proposal:subviews:cache:)``  and
+/// ``placeSubviews(in:proposal:subviews:cache:)`` implementations.
+///
+/// First, the layout defines a ``CacheData`` type for the storage:
+///
+/// ```swift
+/// struct CacheData {
+///     let maxSize: CGSize
+///     let spacing: [CGFloat]
+///     let totalSpacing: CGFloat
+/// }
+/// ```
+///
+/// It then implements the protocol's optional ``makeCache(subviews:)``
+/// method to do the calculations for a set of subviews, returning a value of
+/// the type defined above.
+///
+/// ```swift
+/// func makeCache(subviews: Subviews) -> CacheData {
+///     let maxSize = maxSize(subviews: subviews)
+///     let spacing = spacing(subviews: subviews)
+///     let totalSpacing = spacing.reduce(0) { $0 + $1 }
+///
+///     return CacheData(
+///         maxSize: maxSize,
+///         spacing: spacing,
+///         totalSpacing: totalSpacing)
+/// }
+/// ```
+///
+/// If the subviews change, SwiftUI calls the layout's
+/// ``updateCache(_:subviews:)`` method. The default implementation of that
+/// method calls ``makeCache(subviews:)`` again, which recalculates the data.
+/// Then the ``sizeThatFits(proposal:subviews:cache:)`` and
+/// ``placeSubviews(in:proposal:subviews:cache:)`` methods make
+/// use of their `cache` parameter to retrieve the data. For example,
+/// ``placeSubviews(in:proposal:subviews:cache:)`` reads the size and the
+/// spacing array from the cache.
+///
+/// ```swift
+/// let maxSize = cache.maxSize
+/// let spacing = cache.spacing
+/// ```
+///
+/// Contrast this with ``MyEqualWidthHStack``, which doesn't use a
+/// cache, and instead calculates the size and spacing information every time
+/// it needs that information.
+///
+/// > Note: Most simple layouts, including this one, don't
+///   gain much efficiency from using a cache. You can profile your app
+///   with Instruments to find out whether a particular layout type actually
+///   benefits from a cache.
 struct MyEqualWidthVStack: Layout {
-    /// Returns a size that the layout container needs to arrange its subviews.
+    /// Returns a size that the layout container needs to arrange its subviews
+    /// vertically with equal widths.
     func sizeThatFits(
         proposal: ProposedViewSize,
         subviews: Subviews,
@@ -25,7 +93,7 @@ struct MyEqualWidthVStack: Layout {
             height: maxSize.height * CGFloat(subviews.count) + totalSpacing)
     }
 
-    /// Places the stack's subviews.
+    /// Places the subviews in a vertical stack.
     /// - Tag: placeSubviewsVertical
     func placeSubviews(
         in bounds: CGRect,
@@ -61,9 +129,9 @@ struct MyEqualWidthVStack: Layout {
 
     /// Creates a cache for a given set of subviews.
     ///
-    /// When the subviews change, SwiftUI calls the `updateCache(_:subviews:)`
-    /// method. The `MyEqualWidthVStack` layout relies on the default
-    /// implementation of that method, which just calls `makeCache(subviews:)`
+    /// When the subviews change, SwiftUI calls the ``updateCache(_:subviews:)``
+    /// method. The ``MyEqualWidthVStack`` layout relies on the default
+    /// implementation of that method, which just calls this method again
     /// to recreate the cache.
     /// - Tag: makeCache
     func makeCache(subviews: Subviews) -> CacheData {

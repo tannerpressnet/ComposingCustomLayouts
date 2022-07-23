@@ -9,7 +9,7 @@ import SwiftUI
 
 /// A background that shows bands for first, second, and third place.
 ///
-/// The `Profile` view uses this as a base, and places the pet avatars on
+/// The ``Profile`` view uses this view as a base, and places the pet avatars on
 /// top of it, arranged in a way that shows each pet's relative rank.
 struct Podium: View {
     var body: some View {
@@ -34,6 +34,7 @@ struct Podium: View {
     }
 }
 
+/// A SwiftUI preview provider for the podium's background view.
 struct Podium_Previews: PreviewProvider {
     static var previews: some View {
         Podium()

@@ -19,6 +19,7 @@
 		C23BC2EC282AB2DD001C4B87 /* Leaderboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23BC2EB282AB2DD001C4B87 /* Leaderboard.swift */; };
 		C23BC2F0282AB429001C4B87 /* ButtonStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23BC2EF282AB429001C4B87 /* ButtonStack.swift */; };
 		C23BC2F2282AB4A9001C4B87 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23BC2F1282AB4A9001C4B87 /* Profile.swift */; };
+		C27EAEC0286E108C00E23AF9 /* CustomLayoutSample.docc in Sources */ = {isa = PBXBuildFile; fileRef = C27EAEBF286E108C00E23AF9 /* CustomLayoutSample.docc */; };
 		C2A517C1282C7C660038B33B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A517C0282C7C660038B33B /* Model.swift */; };
 		C2A517C3282C86D70038B33B /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A517C2282C86D70038B33B /* Avatar.swift */; };
 		C2A517C5282C87950038B33B /* Podium.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A517C4282C87950038B33B /* Podium.swift */; };
@@ -41,6 +42,7 @@
 		C23BC2EB282AB2DD001C4B87 /* Leaderboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leaderboard.swift; sourceTree = "<group>"; };
 		C23BC2EF282AB429001C4B87 /* ButtonStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStack.swift; sourceTree = "<group>"; };
 		C23BC2F1282AB4A9001C4B87 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		C27EAEBF286E108C00E23AF9 /* CustomLayoutSample.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = CustomLayoutSample.docc; sourceTree = "<group>"; };
 		C2A517C0282C7C660038B33B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		C2A517C2282C86D70038B33B /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		C2A517C4282C87950038B33B /* Podium.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Podium.swift; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 			isa = PBXGroup;
 			children = (
 				C23BC2E1282AAD5D001C4B87 /* README.md */,
+				C27EAEBF286E108C00E23AF9 /* CustomLayoutSample.docc */,
 				C23BC2D2282AAB58001C4B87 /* CustomLayoutSampleApp.swift */,
 				C23BC2EE282AB36D001C4B87 /* Views */,
 				C23BC2ED282AB352001C4B87 /* Layouts */,
@@ -222,6 +225,7 @@
 				C23BC2D5282AAB58001C4B87 /* ContentView.swift in Sources */,
 				C2A517C3282C86D70038B33B /* Avatar.swift in Sources */,
 				C23BC2F2282AB4A9001C4B87 /* Profile.swift in Sources */,
+				C27EAEC0286E108C00E23AF9 /* CustomLayoutSample.docc in Sources */,
 				C23BC2D3282AAB58001C4B87 /* CustomLayoutSampleApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

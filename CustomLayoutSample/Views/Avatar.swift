@@ -12,16 +12,20 @@ import SwiftUI
 /// This view shows a colorful circle that contains the first letter of the
 /// pet's type. If you prefer an image for the avatar, you can add images for
 /// each pet type to the asset catalog using the pet's type name as the name
-/// of the image. Then replace the `Circle` and its modifiers in the code below
-/// with an `Image` view like this:
+/// of the image. Then replace the
+/// [`Circle`](https://developer.apple.com/documentation/swiftui/circle)
+/// and its modifiers in the code below with an
+/// [`Image`](https://developer.apple.com/documentation/swiftui/image)
+/// view like this:
 ///
-///     Image(pet.type)
-///         .resizable()
-///         .aspectRatio(contentMode: .fill)
-///         .clipShape(Circle())
-///         .shadow(radius: 7)
-///         .frame(width: 100, height: 100)
-///
+/// ```swift
+/// Image(pet.type)
+///     .resizable()
+///     .aspectRatio(contentMode: .fill)
+///     .clipShape(Circle())
+///     .shadow(radius: 7)
+///     .frame(width: 100, height: 100)
+/// ```
 struct Avatar: View {
     /// The pet to visualize.
     var pet: Pet
@@ -38,6 +42,7 @@ struct Avatar: View {
     }
 }
 
+/// A SwiftUI preview provider for the avatar view.
 struct Avatar_Previews: PreviewProvider {
     static var previews: some View {
         HStack(spacing: 20) {

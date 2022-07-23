@@ -9,6 +9,26 @@ import SwiftUI
 
 /// A view that shows buttons that people tap to vote for their favorite pet,
 /// arranged in a way that best fits available space.
+///
+/// The size of the voting buttons that this view displays depends on the width
+/// of the text they contain. For people that speak another language or that
+/// use a larger text size, the horizontal arrangement provided by the default
+/// ``MyEqualWidthHStack`` layout might not fit in the display. So this view uses
+/// [`ViewThatFits`](https://developer.apple.com/documentation/swiftui/viewthatfits)
+/// to let SwiftUI choose between that and an alternative vertical arrangement
+/// provided by the ``MyEqualWidthVStack`` layout:
+///
+/// ```swift
+/// ViewThatFits { // Choose the first view that fits.
+///     MyEqualWidthHStack { // Arrange horizontally if it fits...
+///         Buttons()
+///     }
+///     MyEqualWidthVStack { // ...or vertically, otherwise.
+///         Buttons()
+///     }
+/// }
+/// ```
+///
 /// - Tag: ButtonStack
 struct ButtonStack: View {
     var body: some View {
@@ -43,6 +63,7 @@ private struct Buttons: View {
     }
 }
 
+/// A SwiftUI preview provider for the voting buttons.
 struct ButtonStack_Previews: PreviewProvider {
     static var previews: some View {
         ButtonStack()
